@@ -181,6 +181,53 @@ namespace Infrastructure
             return contains ?? Expression.Call(member, stringContainsMethod, expression);
         }
     }
+
+
+    public static class FilterQuery
+    {
+        public static IQueryable<TEntity> Filter<TEntity, TFilter>(this IQueryable<TEntity> query, TFilter filter)
+        {
+            Type filterType = typeof(TFilter);
+            Type entityType = typeof(TEntity);
+            var entityTypeProperties = entityType.GetProperties();
+
+            if (ConfigureExpressionTypeDictionary == null) ConfigureExpressionType();
+
+            foreach (var filterProperty in filterType.GetProperties())
+            {
+                var matchedProperty = entityTypeProperties.FirstOrDefault(t => t.Name.StartsWith(filterProperty.Name));
+                if (matchedProperty == null)
+                    throw new Exception(string.Format("property {0} from {1} not found in {2}", filterProperty.Name, filterType, entityType));
+
+                query = query.Where(ConfigureExpressionTypeDictionary[filterProperty.PropertyType], matchedProperty.Name, GetValue(filter, matchedProperty.Name));
+            }
+            return query;
+        }
+
+        public static Dictionary<Type, ExpressionType> ConfigureExpressionTypeDictionary { get; set; }
+
+        private static object GetValue<TFilter>(TFilter filter, string name)
+        {
+            return filter.GetType().GetProperty(name).GetValue(filter);
+        }
+
+        private static void ConfigureExpressionType()
+        {
+            ConfigureExpressionTypeDictionary = new Dictionary<Type, ExpressionType>();
+            ConfigureExpressionTypeDictionary.Add(typeof(int), ExpressionType.Equal);
+            ConfigureExpressionTypeDictionary.Add(typeof(int?), ExpressionType.Equal);
+            ConfigureExpressionTypeDictionary.Add(typeof(decimal), ExpressionType.Equal);
+            ConfigureExpressionTypeDictionary.Add(typeof(decimal?), ExpressionType.Equal);
+            ConfigureExpressionTypeDictionary.Add(typeof(IList), ExpressionType.Power);
+            ConfigureExpressionTypeDictionary.Add(typeof(string), ExpressionType.Power);
+        }
+    }
+    public class AlbumFilter
+    {
+        public int? Quantity { get; set; }
+        public string Title { get; set; }
+        public string Artist { get; set; }
+    }
 }
 
 

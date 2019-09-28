@@ -13,7 +13,10 @@ namespace ConsoleAppTest
         {
             var repository = new AlbumRepository();
 
-            var result = repository.GetAll().Where<Album>(ExpressionType.Power, "Singer.Age", new List<int> { 10, 28 });
+            var result = repository.GetAll().Filter(new AlbumFilter() {  Artist = "3" });
+            WriteAll(result);
+
+            result = repository.GetAll().Where<Album>(ExpressionType.Power, "Singer.Age", new List<int> { 10, 28 });
             WriteAll(result);
 
             result = repository.GetAll().Where<Album>(ExpressionType.Power, "Singer.FirstName", "A");

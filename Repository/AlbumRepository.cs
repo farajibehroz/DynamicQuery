@@ -18,7 +18,7 @@ namespace Repository
                         new Album { Quantity = 32, Artist = "Band3", Title = "Sprint" ,Singer=singerTwo},
                         new Album { Quantity = 65, Artist = "Band3", Title = "Sprint" ,Singer=singerOne},
                         new Album { Quantity = 7, Artist = "Bad4", Title = "Sprint" ,Singer=singerTwo},
-                        new Album { Quantity = 12, Artist = "Band5", Title = "Fall" ,Singer=singerThree},
+                        new Album { Quantity = 10, Artist = "Band5", Title = "Fall" ,Singer=singerThree},
                     };
         public IQueryable<Album> GetAll()
         {
