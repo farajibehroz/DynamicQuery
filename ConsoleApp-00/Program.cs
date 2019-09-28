@@ -1,10 +1,11 @@
-﻿using Repository;
+﻿using Infrastructure;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ConsoleApp_00
+namespace ConsoleAppTest
 {
     class Program
     {
@@ -19,7 +20,6 @@ namespace ConsoleApp_00
             WriteAll(result);
 
             Console.ReadKey();
-
 
             result = result.OrderBy("Singer.Age");
             WriteAll(result);
@@ -38,8 +38,6 @@ namespace ConsoleApp_00
             WriteAll(result);
             Console.ReadKey();
         }
-
-
 
 
         private static void WriteAll(IEnumerable<object> items)
